@@ -1,0 +1,14 @@
+# Tomcat
+server:
+  port: 9100
+
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: dap-monitor
+  profiles:
+    # 环境配置
+    active: @environment@
+    include: base@environment@
+

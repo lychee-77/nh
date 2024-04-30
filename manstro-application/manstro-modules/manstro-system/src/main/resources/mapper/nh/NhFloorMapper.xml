@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dap.system.nh.mapper.NhFloorMapper">
+
+    <resultMap type="com.dap.system.nh.domain.NhFloor" id="NhFloorResult">
+        <result property="id"    column="id"    />
+        <result property="buildId"    column="build_id"    />
+        <result property="floorName"    column="floor_name"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap type="com.dap.system.nh.domain.vo.NhFloorVo" id="NhFloorVoResult">
+        <result property="id"    column="id"    />
+        <result property="buildId"    column="build_id"    />
+        <result property="buildName"    column="build_name"    />
+        <result property="floorName"    column="floor_name"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap id="treeNodeResult" type="com.dap.system.nh.domain.vo.TreeNode">
+        <id property="id" column="build_id" />
+        <result property="label" column="build_name" />
+        <result property="level" column="grandfather" />
+        <collection property="children" ofType="com.dap.system.nh.domain.vo.TreeNode" >
+            <id property="id" column="floor_id" />
+            <result property="label" column="floor_name" />
+            <result property="level" column="father" />
+        </collection>
+    </resultMap>
+
+    <sql id="selectNhFloorVo">
+        select id, build_id, floor_name, build.build_name ,remark, del_flag, create_user, create_time, update_user, update_time from nh_floor floor
+    </sql>
+
+    <sql id="selectNhFloorBuildVo">
+        SELECT
+            floor.id,
+            floor.build_id,
+            build.build_name,
+            floor.floor_name,
+            floor.remark,
+            floor.del_flag,
+            floor.create_user,
+            floor.create_time,
+            floor.update_user,
+            floor.update_time
+        FROM
+            nh_floor floor
+                LEFT JOIN nh_build build ON floor.build_id = build.id
+    </sql>
+
+    <sql id="del_flag_where">
+        and floor.del_flag = '0'
+    </sql>
+
+    <select id="selectNhFloorList" parameterType="com.dap.system.nh.domain.vo.NhFloorVo" resultMap="NhFloorVoResult">
+        <include refid="selectNhFloorBuildVo"/>
+        <where>
+            <if test="buildId != null "> and build_id = #{buildId}</if>
+            <if test="id != null "> and floor.id = #{id}</if>
+            <if test="buildName != null and buildName != ''"> and build.build_name = #{buildName}</if>
+            <if test="floorName != null  and floorName != ''"> and floor_name like concat('%', #{floorName}, '%')</if>
+            <include refid="del_flag_where"></include>
+            <include refid="com.dap.system.nh.mapper.NhBuildMapper.del_flag_where"></include>
+        </where>
+        order by build.build_name,floor.floor_name
+    </select>
+
+    <select id="selectNhFloorById" parameterType="Long" resultMap="NhFloorVoResult">
+        <include refid="selectNhFloorBuildVo"/>
+        where floor.id = #{id}
+        <include refid="del_flag_where"></include>
+    </select>
+    <select id="existsFloorer" resultType="com.dap.system.nh.domain.vo.NhFloorVo">
+        SELECT
+            floor.id,
+            build_id buildId,
+            build.build_name buildName,
+            floor_name floorName
+        FROM
+            nh_floor floor
+                left join nh_build build on  floor.build_id = build.id
+        <where>
+            <if test="buildId != null">
+                and floor.build_id = #{buildId}
+            </if>
+            <if test="floorName != null and floorName != ''">
+                and floor.floor_name = #{floorName}
+            </if>
+            <if test="id != null and id > 0">and floor.id != #{id}</if>
+            <include refid="del_flag_where"></include>
+            <include refid="com.dap.system.nh.mapper.NhBuildMapper.del_flag_where"></include>
+        </where>
+    </select>
+    <select id="existsFloorerIds" resultType="java.lang.Long">
+        select count(1) from t_floor
+        <where>
+            <foreach collection="list" item="id" open="id in (" close=")" separator=",">
+                #{id}
+            </foreach>
+
+            <include refid="del_flag_where"></include>
+
+        </where>
+    </select>
+
+    <select id="currentFloorerIsExistsRoom" resultType="java.lang.String">
+        SELECT
+            room_name floorName
+        FROM
+            nh_room room
+        LEFT JOIN nh_floor floor ON room.floor_id = floor.id
+        <where>
+            room.floor_id in
+            <foreach collection="list" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+            <include refid="del_flag_where"></include>
+            <include refid="com.dap.system.nh.mapper.NhRoomMapper.del_flag_where"></include>
+        </where>
+    </select>
+    <select id="selectNhFloorTreeList" resultMap="treeNodeResult">
+        SELECT
+            build.id build_id,
+            build.build_name,
+            floor.id floor_id,
+            floor.floor_name,
+            1 grandfather,
+            2 father,
+            3 child
+        FROM
+            nh_floor floor
+                LEFT JOIN nh_build build ON floor.build_id = build.id
+        <where>
+            <include refid="del_flag_where" />
+            <include refid="com.dap.system.nh.mapper.NhBuildMapper.del_flag_where"></include>
+        </where>
+            order by build_name,floor_name
+    </select>
+
+
+    <insert id="insertNhFloor" parameterType="com.dap.system.nh.domain.NhFloor" useGeneratedKeys="true" keyProperty="id">
+        insert into nh_floor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="buildId != null">build_id,</if>
+            <if test="floorName != null and floorName != ''">floor_name,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateUser != null">update_user,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="buildId != null">#{buildId},</if>
+            <if test="floorName != null and floorName != ''">#{floorName},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNhFloor" parameterType="com.dap.system.nh.domain.NhFloor">
+        update nh_floor
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="buildId != null">build_id = #{buildId},</if>
+            <if test="floorName != null and floorName != ''">floor_name = #{floorName},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNhFloorById" parameterType="Long">
+        update nh_floor set del_flag = '2' where id = #{id}
+    </delete>
+
+    <delete id="deleteNhFloorByIds" parameterType="Long">
+        update nh_floor set del_flag = '2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+    </delete>
+</mapper>

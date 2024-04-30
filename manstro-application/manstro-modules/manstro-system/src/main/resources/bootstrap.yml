@@ -1,0 +1,14 @@
+# Tomcat
+server:
+  port: 9201
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: dap-system
+  profiles:
+    # 环境配置
+    active: @environment@
+    include: base@environment@
+
+

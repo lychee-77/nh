@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dap.system.nh.mapper.NhMeasureMapper">
+
+    <resultMap type="com.dap.system.nh.domain.vo.NhMeasureVo" id="NhMeasureResult">
+        <result property="id"    column="id"    />
+        <result property="equipId"    column="equip_id"    />
+        <result property="buildId"    column="build_id"    />
+        <result property="spaceId"    column="room_id"    />
+        <result property="floorId"    column="floor_id"    />
+        <result property="currentDate"    column="current_date"    />
+        <result property="nhTypeId"    column="nh_type_id"    />
+        <result property="totalNum"    column="total_num"    />
+        <result property="consumeNum"    column="consume_num"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="buildName"    column="build_name"    />
+        <result property="floorName" column="floor_name"/>
+        <result property="roomName" column="room_name"/>
+        <result property="equipmentTypeModelId" column="equipmentTypeModelId"/>
+        <result property="equipmentTypeModel" column="equip_type_model"/>
+        <result property="nhTypeModel" column="name"/>
+        <result property="typeModel" column="type_model"/>
+    </resultMap>
+
+
+
+    <sql id="selectNhMeasureVo">
+        SELECT
+            measure.id,
+            measure.equip_id,
+            measure.`CURRENT_DATE`,
+            measure.nh_type_id,
+            measure.total_num,
+            measure.remark,
+            measure.del_flag,
+            measure.create_user,
+            measure.create_time,
+            measure.update_user,
+            measure.update_time,
+            build.build_name,
+            build.id build_id,
+            floor.id floor_id,
+            room.id room_id,
+            floor.floor_name,
+            room.room_name,
+            `type`.name,
+            `type`.id equipmentTypeModelId,
+            nh_equip_type.type_model equip_type_model,
+            equipment.type_model
+        FROM
+            nh_measure measure
+            LEFT JOIN nh_type type ON measure.nh_type_id = type.id
+            LEFT JOIN nh_equipment equipment ON measure.equip_id = equipment.id
+            LEFT JOIN nh_room room ON equipment.space_id = room.id
+            LEFT JOIN nh_floor floor ON room.floor_id = floor.id
+            LEFT JOIN nh_build build ON floor.build_id = build.id
+            LEFT JOIN nh_equip_type  ON equipment.type_id = nh_equip_type.id
+    </sql>
+
+    <sql id="selectNhMeasureIsExistsVo">
+        SELECT
+            measure.id,
+            equipment.type_model
+        FROM
+            nh_measure measure
+                LEFT JOIN nh_type type ON measure.nh_type_id = type.id
+                LEFT JOIN nh_equipment equipment ON measure.equip_id = equipment.id
+                LEFT JOIN nh_room room ON equipment.space_id = room.id
+                LEFT JOIN nh_floor floor ON room.floor_id = floor.id
+                LEFT JOIN nh_build build ON floor.build_id = build.id
+                LEFT JOIN nh_equip_type  ON equipment.type_id = nh_equip_type.id
+    </sql>
+
+
+
+    <sql id="del_flag_where">
+       and `measure`.del_flag = '0'
+    </sql>
+    <select id="selectNhMeasureList" parameterType="com.dap.system.nh.domain.vo.NhMeasureVo" resultMap="NhMeasureResult">
+
+        <include refid="selectNhMeasureVo"/>
+        <where>
+            <if test="equipmentTypeModel != null and equipmentTypeModel != ''">
+                and nh_equip_type.type_model = #{equipmentTypeModel}
+            </if>
+            <if test="buildId != null ">
+                and build.id = #{buildId}
+            </if>
+            <if test="floorId != null ">
+                and floor.id = #{floorId}
+            </if>
+            <if test="spaceId != null ">
+                and room.id = #{spaceId}
+            </if>
+            <if test="nhTypeModel != null and  nhTypeModel != ''">
+                and `type`.name = #{nhTypeModel}
+            </if>
+            <if test="likeCurrentDate != null and  likeCurrentDate.size() == 2">
+                <bind name="beforeCurrentDate" value="likeCurrentDate.get(0)"/>
+                <bind name="afterCurrentDate" value="likeCurrentDate.get(1)"/>
+                and measure.current_date >= #{beforeCurrentDate}
+                and measure.current_date &lt; #{afterCurrentDate}
+            </if>
+
+            <if test="equipId != null "> and equip_id = #{equipId}</if>
+            <if test="typeModel != null and typeModel != null"> and equipment.type_model  like concat('%',#{typeModel},'%')</if>
+            <if test="currentDate != null "> and `current_date` = #{currentDate}</if>
+            <if test="nhTypeId != null "> and nh_type_id = #{nhTypeId}</if>
+            <if test="totalNum != null "> and total_num = #{totalNum}</if>
+            <if test="consumeNum != null "> and consume_num = #{consumeNum}</if>
+            <include refid="del_flag_where"></include>
+            <include refid="com.dap.system.nh.mapper.NhTypeMapper.del_flag_where"></include>
+            <include refid="com.dap.system.nh.mapper.NhEquipmentMapper.del_flag_where"></include>
+            <include refid="com.dap.system.nh.mapper.NhEquipTypeMapper.del_flag_where"></include>
+        </where>
+    </select>
+
+
+
+
+    <select id="selectTotalNumIsRange" resultMap="NhMeasureResult">
+        select
+        measure.id,
+        measure.equip_id,
+        measure.`CURRENT_DATE`,
+        measure.nh_type_id,
+        measure.total_num
+        from nh_measure measure
+        <where>
+            equip_id = #{equipId}
+          and nh_type_id = #{nhTypeId}
+            <if test="currentDate != null ">
+                 and `current_date` &lt; #{currentDate}
+            </if>
+            <include refid="del_flag_where"></include>
+        </where>
+
+    </select>
+
+
+
+
+    <select id="selectNhMeasureById" parameterType="Long" resultMap="NhMeasureResult">
+        <include refid="selectNhMeasureVo"/>
+        where `measure`.id = #{id}
+    </select>
+    <select id="currentSpaceIdIsExistsMeasure" resultType="com.dap.system.nh.domain.vo.NhMeasureVo">
+        <include refid="selectNhMeasureIsExistsVo" />
+        <where>
+            <include refid="del_flag_where"></include>
+            <foreach collection="nhMeasure" item="nhStatistic"  close=")" open="and (">
+                <if test="equipId != null">
+                  and  equip_id = #{equipId}
+                </if>
+            </foreach>
+        </where>
+    </select>
+
+    <insert id="insertNhMeasure" parameterType="com.dap.system.nh.domain.NhMeasure" useGeneratedKeys="true" keyProperty="id">
+        insert into nh_measure
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="equipId != null">equip_id,</if>
+            <if test="currentDate != null">`current_date`,</if>
+            <if test="nhTypeId != null">nh_type_id,</if>
+            <if test="totalNum != null">total_num,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateUser != null">update_user,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="equipId != null">#{equipId},</if>
+            <if test="currentDate != null">#{currentDate},</if>
+            <if test="nhTypeId != null">#{nhTypeId},</if>
+            <if test="totalNum != null">#{totalNum},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNhMeasure" parameterType="com.dap.system.nh.domain.NhMeasure">
+        update nh_measure
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="equipId != null">equip_id = #{equipId},</if>
+            <if test="currentDate != null">`current_date` = #{currentDate},</if>
+            <if test="nhTypeId != null">nh_type_id = #{nhTypeId},</if>
+            <if test="totalNum != null">total_num = #{totalNum},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNhMeasureById" parameterType="Long">
+        update nh_measure set del_flag = '2' where id = #{id}
+    </delete>
+
+    <delete id="deleteNhMeasureByIds" parameterType="String">
+        update nh_measure set del_flag = '2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

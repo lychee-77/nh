@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dap.system.office.mapper.TSemesterMapper">
+
+    <resultMap type="com.dap.system.office.domain.TSemester" id="TSemesterResult">
+        <result property="id" column="id"/>
+        <result property="startYear" column="start_year"/>
+        <result property="endYear" column="end_year"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+    <resultMap type="com.dap.system.office.domain.TSemester" id="tSemesterSelectorVoResult">
+        <id property="id" column="id"/>
+        <result property="startYear" column="start_year"/>
+        <result property="endYear" column="end_year"/>
+    </resultMap>
+
+    <sql id="select_tSemester_vo">
+        select id, start_year, end_year, create_time, create_by, update_time, update_by
+        from t_semester
+    </sql>
+
+    <sql id="select_tsemester_name">
+        id,`start_year`,`end_year`
+    </sql>
+
+    <sql id="t_semesterTableName">
+        t_semester
+    </sql>
+
+    <sql id="exists_data_column">
+        count(1)
+    </sql>
+    
+    <sql id="del_flag_where_clause">
+         and del_flag = '0'
+    </sql>
+    <select id="selectTSemesterList" parameterType="com.dap.system.office.domain.TSemester" resultMap="TSemesterResult">
+        <include refid="select_tSemester_vo"/>
+        <where>
+            <if test="startYear != null">and start_year = #{startYear}</if>
+            <if test="endYear != null  ">and end_year = #{endYear}</if>
+            <if test="createTime != null ">and create_time &gt;= #{createTime}</if>
+            <if test="createBy != null  and createBy != ''">and create_by like concat('%', #{createBy}, '%')</if>
+            <if test="updateTime != null ">and update_time &gt;= #{updateTime}</if>
+            <if test="updateBy != null  and updateBy != ''">and update_by like concat('%', #{updateBy}, '%')</if>
+            and del_flag='0'
+        </where>
+        order by `start_year`
+    </select>
+
+    <select id="selectTSemesterById"  resultMap="TSemesterResult">
+        <include refid="select_tSemester_vo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTSemester" parameterType="com.dap.system.office.domain.TSemester">
+        insert into t_semester
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="startYear != null and startYear != ''">start_year,</if>
+            <if test="endYear != null  and endYear != ''">end_year,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="startYear != null and startYear != ''">#{startYear},</if>
+            <if test="endYear != null  and endYear != ''">#{endYear},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy}</if>
+        </trim>
+    </insert>
+
+    <insert id="insertBatchTSemester" >
+        insert into t_semester
+        (
+        start_year,
+         end_year,
+        create_time,
+        create_by
+        )
+        <trim prefix="values" >
+            <foreach collection="list" item="semester" open="(" separator=") , (" close=")">
+               #{semester.startYear},
+                #{semester.endYear},
+               #{semester.createTime},
+               #{semester.createBy}
+            </foreach>
+        </trim>
+    </insert>
+
+    <update id="updateTSemester" parameterType="com.dap.system.office.domain.TSemester">
+        update t_semester
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="startYear != null and startYear != ''">start_year = #{startYear},</if>
+            <if test="endYear != null  and endYear != ''">end_year = #{endYear},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <select id="existsTSemesters" resultType="int">
+        SELECT
+            <include refid="exists_data_column" />
+        FROM
+            <include refid="t_semesterTableName"></include>
+        <where>
+            <include refid="del_flag_where_clause" />
+            <foreach collection="list" item="item" open="and (" close=")" separator=") or (">
+
+                <if test="item.startYear != null and item.startYear != ''">
+                    start_year = #{item.startYear}
+                </if>
+                <if test="item.startYear != null and item.startYear != ''">
+                  and  end_year = #{item.endYear}
+                </if>
+            </foreach>
+
+        </where>
+    </select>
+
+    <delete id="deleteTSemesterById" parameterType="Long">
+        update t_semester
+        set del_flag = '2'
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteTSemesterByIds" parameterType="String">
+        update t_semester set del_flag = '2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectAllTSemesterNameList" resultMap="tSemesterSelectorVoResult">
+        SELECT
+        <include refid="select_tsemester_name"></include>
+        FROM
+        <include refid="t_semesterTableName"></include>
+        <where>
+            del_flag = 0
+        </where>
+    order by `start_year`
+    </select>
+    <select id="selectTSemester" resultType="com.dap.system.office.domain.TSemester">
+        select id,`start_year` startYear,`end_year` endYear
+            from t_semester
+        order by `start_year`
+    </select>
+
+</mapper>

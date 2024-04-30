@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dap.system.office.mapper.TCourseMapper">
+
+    <resultMap type="com.dap.system.office.domain.TCourse" id="TCourseResult">
+        <result property="id"    column="id"    />
+        <result property="couName"    column="cou_name"    />
+        <result property="note"    column="note"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <resultMap id="tCourseSelectorVoResult" type="com.dap.system.office.domain.vo.TCourseSelectorVo">
+        <id column="id" property="id"></id>
+        <result property="couName" column="cou_name"></result>
+        <result property="note" column="note"></result>
+    </resultMap>
+
+    <sql id="selectTCourseVo">
+        SELECT
+            course.id,
+            course.cou_name,
+            course.note,
+            course.create_time,
+            course.create_by,
+            course.update_time,
+            course.update_by
+        FROM
+            t_course course
+    </sql>
+
+    <sql id="selectTCourseName">
+        id,`cou_name`,`note`
+    </sql>
+
+    <sql id="t_courseTableName">
+        t_course
+    </sql>
+
+    <sql id="del_flag_where_clause">
+        and del_flag = '0'
+    </sql>
+    <select id="selectTCourseList" parameterType="com.dap.system.office.domain.TCourse" resultMap="TCourseResult">
+        <include refid="selectTCourseVo"/>
+        <where>
+            <if test="couName != null  and couName != ''"> and course.cou_name like concat('%', #{couName}, '%')</if>
+            <if test="delFlag != null ">and course.del_flag='0'</if>
+        </where>
+    </select>
+
+    <select id="selectTCourseNameList" resultMap="tCourseSelectorVoResult">
+        SELECT
+        <include refid="selectTCourseName"></include>
+        FROM
+        <include refid="t_courseTableName"></include>
+        where del_flag = '0'
+    </select>
+
+    <select id="existsCourse" resultType="integer">
+        select count(1) from t_course
+        <where>
+            and del_flag = '0'
+            <if test="couName != null and couName != ''">
+                and ( cou_name = #{couName} or note = #{note})
+            </if>
+            <if test="id != null">
+                and id != #{id}
+            </if>
+
+        </where>
+    </select>
+    <select id="selectTCourseById" parameterType="Long" resultMap="TCourseResult">
+        <include refid="selectTCourseVo"/>
+        where course.id = #{id} and course.del_flag = '0'
+    </select>
+
+
+
+    <insert id="insertTCourse" parameterType="com.dap.system.office.domain.TCourse">
+        insert into t_course
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="couName != null and couName != ''">cou_name,</if>
+            <if test="note != null and note != ''">note,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="couName != null and couName != ''">#{couName},</if>
+            <if test="note != null">#{note},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+    <insert id="insertBatchTCourse">
+        insert into t_course
+        (
+        cou_name,
+        create_time,
+        create_by
+        )
+        <trim prefix="values" >
+            <foreach collection="list" item="course" open="(" separator=") , (" close=")">
+                #{course.couName},
+                #{course.createTime},
+                #{course.createBy}
+            </foreach>
+        </trim>
+    </insert>
+
+    <update id="updateTCourse" parameterType="com.dap.system.office.domain.TCourse">
+        update t_course
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="couName != null and couName != ''">cou_name = #{couName},</if>
+            <if test="note != null and note != ''">note = #{note},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <select id="existsTClasses" resultType="int">
+        select count(1) from t_course
+        <where>
+            <include refid="del_flag_where_clause"></include>
+           and  cou_name in
+            <foreach collection="list" item="course" separator="," open="(" close=")">
+                #{course.couName}
+            </foreach>
+        </where>
+    </select>
+
+    <delete id="deleteTCourseById" parameterType="Long">
+        update t_course set del_flag = '2' where id = #{id}
+    </delete>
+
+    <delete id="deleteTCourseByIds" parameterType="String">
+        update t_course set del_flag = '2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

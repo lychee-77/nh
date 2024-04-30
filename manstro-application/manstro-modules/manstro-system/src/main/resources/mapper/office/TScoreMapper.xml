@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dap.system.office.mapper.TScoreMapper">
+
+    <resultMap type="com.dap.system.office.domain.TScore" id="TScoreResult">
+        <result property="id"    column="id"    />
+        <result property="stuId" column="stu_id" />
+        <result property="semId" column="sem_id" />
+        <result property="courseId" column="course_id" />
+        <result property="courseName"    column="cou_name"    />
+        <result property="isPass"    column="is_pass"    />
+        <result property="studentName"    column="stu_name"    />
+        <result property="className"    column="class_name"    />
+        <result property="startYear"    column="start_year"    />
+        <result property="endYear"    column="end_year"    />
+        <result property="score"    column="score"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <resultMap id="tStudentDetailScore" type="com.dap.system.office.domain.vo.TStudentDetailScoreVo">
+        <result property="studentName" column="stu_name"></result>
+        <result property="startYear"    column="start_year"    />
+        <result property="endYear"    column="end_year"    />
+        <result property="schoolYear" column="school_year"></result>
+
+
+    </resultMap>
+
+    <resultMap id="tStudentScoreInfoVo" type="com.dap.system.office.domain.vo.TStudentScoreInfoVo">
+        <id property="id"    column="id"    />
+        <result property="scoreIds" column="score_ids"></result>
+        <result property="semId" column="sem_id"></result>
+        <result property="studentNum" column="stu_num"></result>
+        <result property="studentName" column="stu_name"></result>
+        <result property="className" column="class_name"></result>
+        <result property="startYear"    column="start_year"    />
+        <result property="endYear"    column="end_year"    />
+        <result property="totalScore" column="total_score"></result>
+        <result property="avgScore" column="avg_score"></result>
+        <result property="updateBy" column="updateBy"></result>
+    </resultMap>
+
+    <sql id="selectTScoreVo">
+        SELECT
+            score.id,
+            score.stu_id,
+            score.sem_id,
+            score.course_id,
+            course.cou_name,
+               course.note,
+            student.stu_name,
+            class.class_name,
+            score.score,
+            score.create_time,
+            score.create_by,
+            score.update_time,
+            score.update_by,
+            semester.start_year,
+            semester.end_year
+        FROM
+            t_score score
+                LEFT JOIN t_student student ON score.stu_id = student.id
+                LEFT JOIN t_course course ON score.course_id = course.id
+                LEFT JOIN t_class class ON student.class_id = class.id
+                LEFT JOIN t_semester semester ON class.sem_id = semester.id
+    </sql>
+
+    <sql id="selectStudentScoreInfo">
+        SELECT
+            sum(score.id) score_ids,
+            student.id,
+            student.stu_num,
+            semester.end_year,
+            student.stu_name,
+            class.class_name,
+            semester.start_year,
+            score.sem_id,
+            sum(ifnull(score.score,0)) total_score,
+            avg(ifnull(score.score,0)) avg_score
+
+        FROM
+            t_student student
+                LEFT JOIN t_score score on score.stu_id = student.id
+                LEFT JOIN t_class class on student.class_id = class.id
+                LEFT JOIN t_semester semester on score.sem_id = semester.id
+                LEFT JOIN t_semester classSemester on class.sem_id = classSemester.id
+
+    </sql>
+
+
+    <select id="selectStudentScoreInfo" resultMap="tStudentScoreInfoVo">
+        <include refid="selectStudentScoreInfo" />
+        <where>
+            <if test="score.semId != null ">
+                and   semester.id = #{score.semId}
+            </if>
+            <if test="score.startYear != null and score.startYear != ''">
+                and  classSemester.start_year = #{score.startYear}
+            </if>
+            <!-- 点击tree树中的学年-->
+            <if test="score.endYear != null and score.endYear != ''">
+                and  classSemester.end_year = #{score.endYear}
+            </if>
+            <if test="score.className != null and score.className != ''">
+                and  class.class_name = #{score.className}
+            </if>
+            <if test="score.classId != null ">
+                and  student.class_id = #{score.classId}
+            </if>
+            <if test="score.studentName != null and score.studentName != ''">
+                and student.stu_name = #{score.studentName}
+            </if>
+            <!-- 根据分数构造出来的,查询所有成绩中的指定学期成绩 -->
+            <if test="score.scoreSemId != null and score.scoreSemId != ''">
+                and semester.id = #{score.scoreSemId}
+            </if>
+            <if test="courseIds != null">
+                and score.course_id in
+                <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
+                    #{courseId}
+                </foreach>
+            </if>
+
+            and student.del_flag = '0' and score.del_flag = '0'
+        </where>
+        group by student.id,score.sem_id
+        <if test="score.isPass != null and score.isPass == 4 " >
+            HAVING avg_score > 90 and avg_score <![CDATA[ <= ]]> 100
+        </if>
+        <if test="score.isPass != null and score.isPass == 3 " >
+            HAVING avg_score > 80 and avg_score <![CDATA[ <= ]]> 90
+        </if>
+        <if test="score.isPass != null and score.isPass == 2 " >
+            HAVING avg_score > 60 and avg_score <![CDATA[ <= ]]> 80
+        </if>
+        <if test="score.isPass != null and score.isPass == 1 " >
+            HAVING avg_score > 60 and avg_score <![CDATA[ <= ]]> 0
+        </if>
+    </select>
+    <select id="selectTScoreList"  resultMap="TScoreResult">
+        <include refid="selectTScoreVo"/>
+        <where>
+            <if test="score.courseName != null and score.courseName != ''"> and course.cou_name = #{score.courseName}</if>
+            <if test="score.stuId != null "> and score.stu_id = #{score.stuId}</if>
+            <if test="score.studentName != null and score.studentName != ''"> and student.stu_name = #{score.studentName}</if>
+            <if test="score.className != null and score.className != ''"> and class.class_name = #{score.className}</if>
+            <if test="score.score != null "> and score.score = #{score.score}</if>
+            and score.del_flag='0'
+            <if test="score.startYear != null and score.startYear != ''"> and semester.start_year = #{score.startYear}</if>
+            <if test="score.endYear != null and score.endYear != ''"> and semester.end_year = #{score.endYear}</if>
+            <if test="score.semId != null"> and score.sem_id = #{score.semId}</if>
+            <if test="score.courseId != null"> and score.course_id = #{score.courseId}</if>
+            <if test="courseIds != null">
+                 and course_id in
+                <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
+                    #{courseId}
+                </foreach>
+            </if>
+        </where>
+        order by score.`score` desc
+    </select>
+
+    <select id="selectTScoreById"  resultMap="tStudentDetailScore">
+        SELECT
+            max(CASE
+                    WHEN score.course_id = 1 THEN
+                        score else  0
+                END) "chinese_score",
+            max(CASE
+                    WHEN score.course_id = 5 THEN
+                        score else  0
+                END) "match_score",
+            max(CASE
+                    WHEN score.course_id = 6 THEN
+                        score else  0
+                END) "english_score",
+            max(CASE
+                    WHEN score.course_id = 7 THEN
+                        score else  0
+                END) "politic_score",
+            max(CASE
+                    WHEN score.course_id = 10 THEN
+                        score else  0
+                END) "pe_score",
+            semester.start_year,
+            semester.end_year,
+            student.stu_name
+        FROM
+
+            t_student student
+
+                LEFT JOIN t_score score on score.stu_id = student.id
+                LEFT JOIN t_semester semester on score.sem_id = semester.id
+
+        <where>
+            <if test="stuId != null">
+                and student.id = #{stuId}
+            </if>
+
+            <if test="semId != null">
+                and score.sem_id = #{semId}
+            </if>
+             and  score.del_flag = '0' and student.del_flag = '0'
+        </where>
+        group by student.id
+
+
+    </select>
+
+    <insert id="insertTScore" parameterType="com.dap.system.office.domain.TScore" useGeneratedKeys="true" keyProperty="id">
+        insert into t_score
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseId != null">course_id,</if>
+            <if test="stuId != null">stu_id,</if>
+            <if test="score != null">score,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="semId != null">sem_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseId != null">#{courseId},</if>
+            <if test="stuId != null">#{stuId},</if>
+            <if test="score != null">#{score},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="semId != null">#{semId},</if>
+         </trim>
+    </insert>
+
+
+    <select id="existsCourseScore" resultType="int">
+        select count(1) from t_score  score
+        LEFT JOIN t_student student ON score.stu_id = student.id
+        LEFT JOIN t_course course ON score.course_id = course.id
+        <where>
+            <if test="courseId != null and courseId > 0">
+                score.course_id = #{courseId} and
+            </if>
+            <if test="stuId != null and stuId > 0">
+                score.stu_id = #{stuId} and
+            </if>
+            <if test="courseName != null">
+                course.cou_name = #{courseName} and
+            </if>
+             student.del_flag = '0' and score.del_flag = '0' and course.del_flag = '0'
+        </where>
+
+    </select>
+
+
+    <update id="updateTScore" parameterType="com.dap.system.office.domain.TScore">
+        update t_score
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="score != null">score = #{score},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where stu_id = #{stuId}
+            and sem_id = #{semId}
+            and course_id = #{courseId}
+    </update>
+    <select id="existsStudentIds" resultType="int">
+        select count(1) from t_score score where stu_id in
+            <foreach collection="array" item="stuId" open="(" close=")" separator=",">
+                #{stuId}
+            </foreach>
+    </select>
+
+    <delete id="deleteTScoreById" parameterType="Long">
+        update t_score set del_flag = '2' where id = #{id}
+    </delete>
+
+    <delete id="deleteTScoreByStuId">
+        update t_score set del_flag = '2' where stu_id = #{stuId} and sem_id = #{semId}
+    </delete>
+
+    <select id="selectScoreDetail" resultMap="tStudentDetailScore">
+        SELECT
+        max(CASE
+        WHEN score.course_id = 1 THEN
+        score else  0
+        END) "chinese_score",
+        max(CASE
+        WHEN score.course_id = 5 THEN
+        score else  0
+        END) "match_score",
+        max(CASE
+        WHEN score.course_id = 6 THEN
+        score else  0
+        END) "english_score",
+        max(CASE
+        WHEN score.course_id = 7 THEN
+        score else  0
+        END) "politic_score",
+        max(CASE
+        WHEN score.course_id = 10 THEN
+        score else  0
+        END) "pe_score"
+        FROM
+        t_student student
+
+        LEFT JOIN t_score score on score.stu_id = student.id
+
+        <where>
+            student.id = #{stuId}
+            and score.sem_id = #{semId}
+            and score.del_flag = '0' and student.del_flag = '0'
+        </where>
+        group by student.id
+
+    </select>
+
+
+</mapper>

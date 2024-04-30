@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.dap</groupId>
+        <artifactId>manstro</artifactId>
+        <version>2.5.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>manstro-common-log</module>
+        <module>manstro-common-base</module>
+        <module>manstro-common-core</module>
+        <module>manstro-common-redis</module>
+        <module>manstro-common-swagger</module>
+        <module>manstro-common-security</module>
+        <module>manstro-common-datascope</module>
+		<module>manstro-common-datasource</module>
+    </modules>
+
+    <artifactId>manstro-common</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        manstro-common通用模块
+    </description>
+
+</project>

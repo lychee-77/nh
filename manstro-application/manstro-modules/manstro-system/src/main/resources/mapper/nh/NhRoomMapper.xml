@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dap.system.nh.mapper.NhRoomMapper">
+
+    <resultMap type="com.dap.system.nh.domain.vo.NhRoomVo" id="NhRoomResult">
+        <result property="id"    column="id"    />
+        <result property="floorId"    column="floor_id"    />
+        <result property="buildName"    column="build_name"    />
+        <result property="buildId"    column="build_id"    />
+        <result property="floorName"    column="floor_name"    />
+        <result property="roomName"    column="room_name"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap type="com.dap.system.nh.domain.vo.TreeNode" id="NhBuildResultTree">
+        <id property="id" column="build_id"/>
+        <result property="label" column="build_name" />
+        <result property="level" column="grandfather" />
+        <collection property="children" ofType="com.dap.system.nh.domain.vo.TreeNode">
+            <id property="id" column="floor_id"/>
+            <result property="label" column="floor_name" />
+            <result property="level" column="father" />
+            <collection property="children" ofType="com.dap.system.nh.domain.vo.TreeNode">
+                <id property="id" column="id"/>
+                <result property="label" column="room_name" />
+                <result property="level" column="child" />
+            </collection>
+        </collection>
+    </resultMap>
+
+    <sql id="selectNhRoomVo">
+        SELECT
+            room.id,
+            room.floor_id,
+            floor.floor_name,
+            build.build_name,
+            floor.build_id,
+            room.room_name,
+            room.remark,
+            room.del_flag,
+            room.create_user,
+            room.create_time,
+            room.update_user,
+            room.update_time
+        FROM
+            nh_room room
+                LEFT JOIN nh_floor floor on room.floor_id = floor.id
+                LEFT JOIN nh_build build on floor.build_id = build.id
+    </sql>
+
+    <sql id="selectNhRoomTreeVo">
+        SELECT
+            room.id,
+            room.floor_id,
+            floor.floor_name,
+            build.build_name,
+            floor.build_id,
+            room.room_name,
+            room.remark,
+            room.del_flag,
+            room.create_user,
+            room.create_time,
+            room.update_user,
+            room.update_time,
+            1 grandfather,
+            2 father,
+            3 child
+        FROM
+            nh_room room
+                LEFT JOIN nh_floor floor on room.floor_id = floor.id
+                LEFT JOIN nh_build build on floor.build_id = build.id
+    </sql>
+
+    <sql id="del_flag_where">
+        and room.del_flag = '0'
+    </sql>
+
+    <select id="selectNhRoomList" parameterType="com.dap.system.nh.domain.vo.NhRoomVo" resultMap="NhRoomResult">
+        <include refid="selectNhRoomVo"/>
+        <where>
+            <if test="buildId != null "> and build_id = #{buildId}</if>
+            <if test="floorId != null "> and floor_id = #{floorId}</if>
+            <if test="id != null "> and id = #{id}</if>
+            <if test="roomName != null  and roomName != ''"> and room_name like concat('%', #{roomName}, '%')</if>
+            <include refid="del_flag_where"></include>
+            <include refid="com.dap.system.nh.mapper.NhFloorMapper.del_flag_where"></include>
+        </where>
+        order by build.build_name
+    </select>
+
+    <select id="selectNhBuildTreeList" resultMap="NhBuildResultTree">
+        <include refid="selectNhRoomTreeVo"/>
+        <where>
+            <include refid="del_flag_where"></include>
+            <include refid="com.dap.system.nh.mapper.NhFloorMapper.del_flag_where"></include>
+            <include refid="com.dap.system.nh.mapper.NhBuildMapper.del_flag_where"></include>
+        </where>
+        order by build.build_name,floor.floor_name,room.room_name
+    </select>
+
+    <select id="selectNhRoomById" parameterType="Long" resultMap="NhRoomResult">
+        <include refid="selectNhRoomVo"/>
+        where room.id = #{id}
+        <include refid="com.dap.system.nh.mapper.NhFloorMapper.del_flag_where"></include>
+    </select>
+    <select id="existsRoomByFloor" resultType="com.dap.system.nh.domain.vo.NhRoomVo">
+        SELECT
+        room.id,
+        floor.id floorId,
+        floor.floor_name floorName,
+        room_name roomName,
+        build.build_name buildName,
+        build.id buildId
+        FROM
+        nh_room room
+        left join nh_floor floor on  room.floor_id = floor.id
+        left join nh_build build on floor.build_id = build.id
+        <where>
+            <if test="floorId != null">
+                and room.floor_id = #{floorId}
+            </if>
+            <if test="roomName != null and roomName != ''">
+                and room.room_name = #{roomName}
+            </if>
+            <if test="id != null and id > 0">and room.id != #{id}</if>
+            <include refid="del_flag_where"></include>
+            <include refid="com.dap.system.nh.mapper.NhFloorMapper.del_flag_where"></include>
+        </where>
+    </select>
+
+    <insert id="insertNhRoom" parameterType="com.dap.system.nh.domain.NhRoom" useGeneratedKeys="true" keyProperty="id">
+        insert into nh_room
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="floorId != null">floor_id,</if>
+            <if test="roomName != null and roomName != ''">room_name,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateUser != null">update_user,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="floorId != null">#{floorId},</if>
+            <if test="roomName != null and roomName != ''">#{roomName},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNhRoom" parameterType="com.dap.system.nh.domain.NhRoom">
+        update nh_room
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="floorId != null">floor_id = #{floorId},</if>
+            <if test="roomName != null and roomName != ''">room_name = #{roomName},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+
+    </update>
+
+    <delete id="deleteNhRoomById" parameterType="Long">
+        update nh_room set del_flag = '2' where id = #{id}
+        <include refid="com.dap.system.nh.mapper.NhFloorMapper.del_flag_where"></include>
+    </delete>
+
+    <delete id="deleteNhRoomByIds" parameterType="String">
+        update nh_room set del_flag = '2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+    </delete>
+</mapper>

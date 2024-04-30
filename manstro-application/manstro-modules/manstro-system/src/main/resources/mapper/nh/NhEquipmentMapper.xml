@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dap.system.nh.mapper.NhEquipmentMapper">
+
+    <resultMap type="com.dap.system.nh.domain.vo.NhEquipmentVo" id="NhEquipmentResult">
+        <result property="id" column="id"/>
+        <result property="typeModel" column="type_model"/>
+        <result property="equipmentTypeModel" column="equipment_type_model"/>
+        <result property="venderName" column="vender_name"/>
+        <result property="locationName" column="location_name"/>
+        <result property="baseinfoId" column="baseinfo_id"/>
+        <result property="typeId" column="type_id"/>
+        <result property="buildId" column="buildId"/>
+        <result property="floorId" column="floorId"/>
+        <result property="spaceId" column="space_id"/>
+        <result property="remark" column="remark"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="buildName" column="build_name"/>
+        <result property="floorName" column="floor_name"/>
+        <result property="roomName" column="room_name"/>
+    </resultMap>
+
+
+    <resultMap type="com.dap.system.nh.domain.vo.TreeNode" id="NhEquipmentTreeNodeResult">
+        <result property="id" column="build_id"/>
+        <result property="label" column="build_name"/>
+        <collection property="children" ofType="com.dap.system.nh.domain.vo.TreeNode">
+            <result property="id" column="floor_id"/>
+            <result property="label" column="floor_name"/>
+            <collection property="children" ofType="com.dap.system.nh.domain.vo.TreeNode">
+                <result property="id" column="room_id"/>
+                <result property="label" column="room_name"/>
+                <collection property="children" ofType="com.dap.system.nh.domain.vo.TreeNode">
+                    <result property="id" column="equipment_id"/>
+                    <result property="label" column="type_model"/>
+                </collection>
+            </collection>
+        </collection>
+    </resultMap>
+    <sql id="selectNhEquipmentVo">
+        SELECT equipment.id,
+               equipment.type_model,
+               equipment.baseinfo_id,
+               equipment.type_id,
+               equipment.space_id,
+               equipment.remark,
+               equipment.del_flag,
+               equipment.create_user,
+               equipment.create_time,
+               equipment.update_user,
+               equipment.update_time,
+               baseInfo.vender_name,
+               baseInfo.location_name,
+               nh_equip_type.type_model equipment_type_model,
+               room.room_name,
+               floor.floor_name,
+               build.build_name,
+               build.id buildId,
+               floor.id floorId
+        FROM nh_equipment equipment
+                 LEFT JOIN nh_equip_baseinfo baseInfo ON equipment.baseinfo_id = baseInfo.id
+                 LEFT JOIN nh_equip_type  ON equipment.type_id = nh_equip_type.id
+                 LEFT JOIN nh_room room ON equipment.space_id = room.id
+                 LEFT JOIN nh_floor floor ON room.floor_id = floor.id
+                 LEFT JOIN nh_build build ON floor.build_id = build.id
+    </sql>
+
+    <sql id="del_flag_where">
+        and equipment.del_flag = '0'
+    </sql>
+
+    <select id="selectNhEquipmentList" resultMap="NhEquipmentResult">
+        <include refid="selectNhEquipmentVo"/>
+        <where>
+            <if test="typeModel != null  and typeModel != ''">and equipment.type_model like concat('%',#{typeModel},'%')</if>
+            <if test="baseinfoId != null ">and baseinfo_id = #{baseinfoId}</if>
+            <if test="equipmentTypeModel != null  and equipmentTypeModel != ''">
+                and nh_equip_type.type_model = #{equipmentTypeModel}
+            </if>
+            <if test="locationName != null  and locationName != ''">
+                and baseInfo.locationName = #{locationName}
+            </if>
+            <if test="venderName != null  and venderName != ''">
+                and baseInfo.vender_name = #{venderName}
+            </if>
+            <if test="buildName != null and buildName != ''">and build.build_name = #{buildName}</if>
+            <if test="floorName != null and floorName != ''">and floor.floor_name = #{floorName}</if>
+            <if test="roomName != null and roomName != ''">and room.room_name = #{roomName}</if>
+            <if test="typeId != null ">and type_id = #{typeId}</if>
+            <if test="spaceId != null ">and space_id = #{spaceId}</if>
+            <if test="buildId != null ">and build.id = #{buildId}</if>
+            <if test="floorId != null ">and floor.id = #{floorId}</if>
+            <include refid="del_flag_where"></include>
+            and  baseInfo.del_flag = '0'
+            and nh_equip_type.del_flag = '0'
+            <include refid="com.dap.system.nh.mapper.NhRoomMapper.del_flag_where" />
+            <include refid="com.dap.system.nh.mapper.NhFloorMapper.del_flag_where"/>
+            <include refid="com.dap.system.nh.mapper.NhBuildMapper.del_flag_where"/>
+        </where>
+    </select>
+
+    <select id="selectNhEquipmentGetEquipId" resultMap="NhEquipmentResult">
+        <include refid="selectNhEquipmentVo"/>
+        <where>
+             and equipment.type_model = #{typeModel}
+            and build.build_name = #{buildName}
+            and floor.floor_name = #{floorName}
+          and room.room_name = #{roomName}
+            <include refid="del_flag_where"></include>
+            and  baseInfo.del_flag = '0'
+            and nh_equip_type.del_flag = '0'
+            <include refid="com.dap.system.nh.mapper.NhRoomMapper.del_flag_where" />
+            <include refid="com.dap.system.nh.mapper.NhFloorMapper.del_flag_where"/>
+            <include refid="com.dap.system.nh.mapper.NhBuildMapper.del_flag_where"/>
+        </where>
+    </select>
+
+    <select id="selectNhEquipmentById" parameterType="Long" resultMap="NhEquipmentResult">
+        <include refid="selectNhEquipmentVo"/>
+        <where>
+equipment.id = #{id}
+        <include refid="del_flag_where"></include>
+            and  baseInfo.del_flag = '0'
+           and nh_equip_type.del_flag = '0'
+        <include refid="com.dap.system.nh.mapper.NhRoomMapper.del_flag_where" />
+        <include refid="com.dap.system.nh.mapper.NhFloorMapper.del_flag_where"/>
+        <include refid="com.dap.system.nh.mapper.NhBuildMapper.del_flag_where"/>
+        </where>
+    </select>
+    <select id="selectBatchNhEquipmentsBySpaceIds" resultMap="NhEquipmentResult">
+        <include refid="selectNhEquipmentVo"/>
+        <where>
+            equipment.space_id
+            <foreach collection="list" open="in (" close=")" separator="," item="spaceId">
+                #{spaceId}
+            </foreach>
+            <include refid="del_flag_where"></include>
+            and  baseInfo.del_flag = '0'
+            and nh_equip_type.del_flag = '0'
+            <include refid="com.dap.system.nh.mapper.NhRoomMapper.del_flag_where" />
+            <include refid="com.dap.system.nh.mapper.NhFloorMapper.del_flag_where"/>
+            <include refid="com.dap.system.nh.mapper.NhBuildMapper.del_flag_where"/>
+        </where>
+    </select>
+    <select id="selectNhEquipmentTreeList" resultMap="NhEquipmentTreeNodeResult">
+        SELECT
+            build.build_name,
+            build.id build_id,
+            floor.floor_name,
+            floor_id floor_id,
+            room.id room_id,
+            room.room_name,
+            equipment.type_model,
+            equipment.id equipment_id
+        FROM
+            nh_equipment equipment
+                left join nh_room room on equipment.space_id = room.id
+                left join nh_floor floor on room.floor_id = floor.id
+                left join nh_build build on floor.build_id = build.id
+        <where>
+            <include refid="del_flag_where"></include>
+            <include refid="com.dap.system.nh.mapper.NhRoomMapper.del_flag_where" />
+            <include refid="com.dap.system.nh.mapper.NhFloorMapper.del_flag_where"/>
+            <include refid="com.dap.system.nh.mapper.NhBuildMapper.del_flag_where"/>
+        </where>
+        order by build.build_name,floor.floor_name,room.room_name,equipment.type_model
+    </select>
+    <select id="existsNhType" resultMap="NhEquipmentResult">
+        SELECT
+            build.build_name,
+            build.id build_id,
+            floor.floor_name,
+            floor_id floor_id,
+            room.id room_id,
+            room.room_name,
+            equipment.type_model,
+            equipment.id equipment_id
+        FROM
+            nh_equipment equipment
+                left join nh_room room on equipment.space_id = room.id
+                left join nh_floor floor on room.floor_id = floor.id
+                left join nh_build build on floor.build_id = build.id
+        <where>
+            <if test="id != null and id > 0">and equipment.id != #{id}</if>
+
+            <if test="spaceId != null ">
+                and equipment.space_id = #{spaceId}
+            </if>
+            <if test="typeModel != null ">
+                and equipment.type_model = #{typeModel}
+            </if>
+            <include refid="del_flag_where" />
+            <include refid="com.dap.system.nh.mapper.NhBuildMapper.del_flag_where"/>
+            <include refid="com.dap.system.nh.mapper.NhFloorMapper.del_flag_where" />
+            <include refid="com.dap.system.nh.mapper.NhRoomMapper.del_flag_where" />
+        </where>
+    </select>
+
+    <insert id="insertNhEquipment" parameterType="com.dap.system.nh.domain.NhEquipment" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into nh_equipment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="typeModel != null and typeModel != ''">type_model,</if>
+            <if test="baseinfoId != null">baseinfo_id,</if>
+            <if test="typeId != null">type_id,</if>
+            <if test="spaceId != null">space_id,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateUser != null">update_user,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="typeModel != null and typeModel != ''">#{typeModel},</if>
+            <if test="baseinfoId != null">#{baseinfoId},</if>
+            <if test="typeId != null">#{typeId},</if>
+            <if test="spaceId != null">#{spaceId},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateNhEquipment" parameterType="com.dap.system.nh.domain.NhEquipment">
+        update nh_equipment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="typeModel != null and typeModel != ''">type_model = #{typeModel},</if>
+            <if test="baseinfoId != null">baseinfo_id = #{baseinfoId},</if>
+            <if test="typeId != null">type_id = #{typeId},</if>
+            <if test="spaceId != null">space_id = #{spaceId},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNhEquipmentById" parameterType="Long">
+        update nh_equipment
+        set del_flag = '2'
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteNhEquipmentByIds" parameterType="String">
+        update nh_equipment set del_flag = '2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dap.system.office.mapper.TClassMapper">
+
+    <resultMap type="com.dap.system.office.domain.TClass" id="TClassResult">
+        <result property="id"    column="id"    />
+        <result property="className"    column="class_name"    />
+        <result property="endYear"    column="end_year"    />
+        <result property="startYear"    column="start_year"    />
+        <result property="semId"    column="sem_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <resultMap id="tClassSelectorVoResult" type="com.dap.system.office.domain.vo.TClassSelectorVo">
+        <id column="id" property="id"></id>
+        <result property="className" column="class_name"></result>
+        <result property="semesterSelectorVo.studayYear" column="school_year"></result>
+    </resultMap>
+
+    <resultMap id="tGradeSelectorVoResult" type="com.dap.system.office.domain.vo.TClassSelectorVo">
+<!--        <result property="graId" column="gra_id"></result>-->
+    </resultMap>
+
+    <sql id="selectTClassVo">
+        SELECT
+            class.id,
+            class.class_name,
+            semester.start_year,
+            semester.end_year,
+            class.sem_id,
+            class.create_time,
+            class.create_by,
+            class.update_time,
+            class.update_by
+        FROM
+            t_class class
+                LEFT JOIN t_semester semester ON class.sem_id = semester.id
+
+    </sql>
+
+    <sql id="selectTClassName">
+        class.id,
+	    class.class_name,
+	    (semester.start_year,"-",semester.end_year) school_year
+    </sql>
+
+    <sql id="t_ClassTableName">
+        t_class class
+    </sql>
+    <sql id="exists_data_column">
+        count(1)
+    </sql>
+
+    <sql id="del_flag_where_clause">
+        and del_flag = '0'
+    </sql>
+
+    <select id="selectTClassList" parameterType="com.dap.system.office.domain.TClass" resultMap="TClassResult">
+        <include refid="selectTClassVo"/>
+        <where>
+            <if test="className != null  and className != ''"> and class_name =  #{className} </if>
+            <if test="startYear != null "> and start_year = #{startYear} </if>
+            <if test="endYear != null ">and end_year = #{endYear}</if>
+            <if test="semId != null "> and class.sem_id = #{semId}</if>
+            <if test="createTime != null "> and class.create_time &gt;= #{createTime}</if>
+            <if test="createBy != null  and createBy != ''"> and class.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="updateTime != null "> and class.update_time &gt;= #{updateTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and class.update_by like concat('%', #{updateBy}, '%')</if>
+            and class.del_flag='0'
+        </where>
+
+    </select>
+
+    <select id="selectTClassById"  resultMap="TClassResult">
+        <include refid="selectTClassVo"/>
+        where class.id = #{id} and class.del_flag = '0'
+    </select>
+
+    <select id="existsClass" resultType="integer">
+        SELECT
+            count(1)
+        FROM
+            t_class class
+        <where>
+            <if test="semId != null and semId > 0">
+                and class.sem_id = #{semId}
+            </if>
+
+            <if test="className != null and className != ''">
+                and class.class_name = #{className}
+            </if>
+
+            <if test="id != null">
+                and id != #{id}
+            </if>
+                and class.del_flag = 0
+        </where>
+    </select>
+
+
+    <select id="selectTClassNameList" resultMap="tClassSelectorVoResult">
+        SELECT
+        <include refid="selectTClassName"></include>
+        FROM
+            t_semester semester
+        LEFT JOIN t_class class ON class.sem_id = semester.id
+        <where>
+
+            <if test="className != null and className != ''">
+                and  semester.class_name = #{className}
+            </if>
+            <if test="startYear != null ">
+                and  semester.start_year = #{startYear}
+            </if>
+            <if test="endYear != null ">
+                and  semester.end_year = #{endYear}
+            </if>
+            and class.del_flag = '0'
+</where>
+    order by semester.`start_year`
+
+    </select>
+
+    <select id="existsTClasses" resultType="int">
+        SELECT
+            <include refid="exists_data_column" />
+        FROM
+            <include refid="t_ClassTableName"></include>
+        <where>
+            <include refid="del_flag_where_clause" />
+            <foreach collection="list" item="item" open="and (" close=")" separator=") or (">
+
+                <if test="item.className != null and item.className != ''">
+                    class_name = #{item.className} and
+                </if>
+                <if test="item.semId != null">
+                      sem_id = #{item.semId}
+                </if>
+            </foreach>
+
+        </where>
+    </select>
+
+    <insert id="insertTClass" parameterType="com.dap.system.office.domain.TClass">
+        insert into t_class
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="className != null and className != ''">class_name,</if>
+            <if test="semId != null">sem_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="className != null and className != ''">#{className},</if>
+            <if test="semId != null">#{semId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+         </trim>
+    </insert>
+    <insert id="insertBatchTSemester">
+        insert into t_class
+        (
+        class_name,
+        sem_id,
+        create_time,
+        create_by
+        )
+        <trim prefix="values" >
+            <foreach collection="list" item="tClass" open="(" separator=") , (" close=")">
+                #{tClass.className},
+                #{tClass.semId},
+                #{tClass.createTime},
+                #{tClass.createBy}
+            </foreach>
+        </trim>
+    </insert>
+
+    <update id="updateTClass" parameterType="com.dap.system.office.domain.TClass">
+        update t_class
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="className != null and className != ''">class_name = #{className},</if>
+            <if test="semId != null">sem_id = #{semId},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id} and del_flag = '0'
+    </update>
+
+    <delete id="deleteTClassById" parameterType="Long">
+        update t_class set del_flag = '2' where id = #{id} and del_flag = '0'
+    </delete>
+
+    <delete id="deleteTClassByIds" parameterType="String">
+        update t_class set del_flag = '2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        and del_flag = '0'
+    </delete>
+</mapper>

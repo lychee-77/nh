@@ -1,0 +1,18 @@
+# Tomcat
+server:
+  port: 9200
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: dap-auth
+  profiles:
+    # 环境配置
+    active: @environment@
+    include: base@environment@
+license:
+  licensePath: D://work//license//license.lic
+  publicAlias: publicCert
+  publicKeysStorePath: D://work//license//publicCerts.keystore
+  storePass: public_password1234
+  subject: license_demo

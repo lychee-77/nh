@@ -1,0 +1,18 @@
+# Tomcat
+server:
+  port: 9300
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: dap-file
+  profiles:
+    # 环境配置
+    active: @environment@
+    include: base@environment@
+
+  # 文件上传大小限制
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB

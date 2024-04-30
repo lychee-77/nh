@@ -1,0 +1,54 @@
+# Tomcat
+server:
+  port: 8080
+
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: dap-gateway
+  profiles:
+    # 环境配置
+    active: @environment@
+    include: base@environment@
+  main:
+    allow-bean-definition-overriding: true
+---
+spring:
+  profiles: dev
+  cloud:
+    sentinel:
+      # 取消控制台懒加载
+      eager: true
+      transport:
+        # 控制台地址
+        dashboard: 127.0.0.1:8718
+      # nacos配置持久化
+      datasource:
+        ds1:
+          nacos:
+            server-addr: 127.0.0.1:8848
+            dataId: sentinel-dap-gateway
+            groupId: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow
+
+---
+spring:
+  profiles: prod
+  cloud:
+    sentinel:
+      # 取消控制台懒加载
+      eager: true
+      transport:
+        # 控制台地址
+        dashboard: 127.0.0.1:8718
+      # nacos配置持久化
+      datasource:
+        ds1:
+          nacos:
+            server-addr: 127.0.0.1:8848
+            dataId: sentinel-dap-gateway
+            groupId: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow

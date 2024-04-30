@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dap.system.office.mapper.TStudentMapper">
+
+    <resultMap type="com.dap.system.office.domain.TStudent" id="TStudentResult">
+        <result property="id"    column="id"    />
+        <result property="stuNum"    column="stu_num"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="className"    column="class_name"    />
+        <result property="classId"    column="class_id"    />
+        <result property="semId"    column="sem_id"    />
+        <result property="startYear"    column="start_year"    />
+        <result property="endYear"    column="end_year"    />
+        <result property="stuBirthday"    column="stu_birthday"    />
+        <result property="stuSex"    column="stu_sex"    />
+        <result property="stuIdNumber"    column="stu_id_number"    />
+        <result property="nation"    column="nation"    />
+        <result property="age"    column="age"    />
+        <result property="photo"    column="photo"    />
+        <result property="note"    column="note"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <resultMap id="TStudentSelector" type="com.dap.system.office.domain.vo.TStudentSelectorVo">
+        <result property="id"    column="id"    />
+        <result property="stuName"    column="stu_name"    />
+    </resultMap>
+
+    <sql id="selectTStudentVo">
+        SELECT
+            student.id,
+            class.sem_id,
+            student.stu_num,
+            student.stu_name,
+            semester.start_year,
+            semester.end_year,
+            class.class_name,
+            student.class_id,
+            student.stu_birthday,
+            student.stu_sex,
+            student.stu_id_number,
+            student.nation,
+            student.age,
+            student.photo,
+            student.note,
+            student.create_time,
+            student.create_by,
+            student.update_time,
+            student.update_by
+        FROM
+            t_student student
+                LEFT JOIN t_class class ON student.class_id = class.id
+                LEFT JOIN t_semester semester ON class.sem_id = semester.id
+    </sql>
+
+    <sql id="selectTStudentName">
+        student.id,student.`stu_name`
+    </sql>
+
+    <sql id="t_studentTableName">
+        t_student student
+    </sql>
+    <sql id="del_flag_where_clause">
+        and student.del_flag = '0'
+    </sql>
+    <select id="selectTStudentList" parameterType="com.dap.system.office.domain.TStudent" resultMap="TStudentResult">
+        <include refid="selectTStudentVo"/>
+        <where>
+            <if test="stuNum != null  and stuNum != ''"> and student.stu_num like concat('%', #{stuNum}, '%')</if>
+            <if test="stuName != null  and stuName != ''"> and student.stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="className != null and className != ''"> and class.class_name  = #{className}</if>
+            <if test="startYear != null  and startYear != ''"> and semester.start_year = #{startYear}</if>
+            <if test="endYear != null  and endYear != ''"> and semester.end_year = #{endYear}</if>
+            <if test="classId != null"> and student.class_id  = #{classId}</if>
+            <if test="stuBirthday != null "> and student.stu_birthday = #{stuBirthday}</if>
+            <if test="startBirthdayMonnt != null and endBirthdayMonnt != null">
+             and student.stu_birthday >= #{startBirthdayMonnt} and student.stu_birthday &lt; #{endBirthdayMonnt}
+             </if>
+            <if test="stuSex != null  and stuSex != ''"> and student.stu_sex = #{stuSex}</if>
+            <if test="stuIdNumber != null  and stuIdNumber != ''"> and student.stu_id_number like concat('%', #{stuIdNumber}, '%')</if>
+            <if test="nation != null  and nation != ''"> and student.nation = #{nation}</if>
+            <if test="age != null "> and student.age = #{age}</if>
+            and student.del_flag='0'
+            and class.del_flag= '0'
+        </where>
+        order by student.stu_num
+    </select>
+
+    <select id="selectTStudentById"  resultMap="TStudentResult">
+        <include refid="selectTStudentVo"/>
+        where student.id = #{id} <include refid="del_flag_where_clause"></include>
+    </select>
+    <select id="selectAllTStudentNameList" resultMap="TStudentSelector">
+        SELECT
+            <include refid="selectTStudentName"></include>
+        FROM
+            <include refid="t_studentTableName"></include>
+        LEFT JOIN
+            t_class class
+            ON
+                student.class_id = class.id
+
+        LEFT JOIN
+            t_semester semester
+            on class.sem_id = semester.id
+        <where>
+            <if test="className != null and className != ''">
+                class.class_name like concat('%',#{className},'%')
+            </if>
+            <if test="classId != null and classId != ''">
+                class.id = #{classId}
+            </if>
+
+
+            and student.del_flag = '0'
+        </where>
+    </select>
+
+    <insert id="insertTStudent" parameterType="com.dap.system.office.domain.TStudent" useGeneratedKeys="true" keyProperty="id">
+        insert into t_student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuNum != null and stuNum != ''">stu_num,</if>
+            <if test="stuName != null and stuName != ''">stu_name,</if>
+            <if test="classId != null">class_id,</if>
+            <if test="stuBirthday != null">stu_birthday,</if>
+            <if test="stuSex != null and stuSex != ''">stu_sex,</if>
+            <if test="stuIdNumber != null and stuIdNumber != ''">stu_id_number,</if>
+            <if test="nation != null and nation != ''">nation,</if>
+            <if test="age != null">age,</if>
+            <if test="photo != null and photo != ''">photo,</if>
+            <if test="note != null and note != ''">note,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="delFlag != null and delFlag != ''">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuNum != null and stuNum != ''">#{stuNum},</if>
+            <if test="stuName != null and stuName != ''">#{stuName},</if>
+            <if test="classId != null">#{classId},</if>
+            <if test="stuBirthday != null">#{stuBirthday},</if>
+            <if test="stuSex != null and stuSex != ''">#{stuSex},</if>
+            <if test="stuIdNumber != null and stuIdNumber != ''">#{stuIdNumber},</if>
+            <if test="nation != null and nation != ''">#{nation},</if>
+            <if test="age != null">#{age},</if>
+            <if test="photo != null and photo != ''">#{photo},</if>
+            <if test="note != null and note != ''">#{note},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+         </trim>
+    </insert>
+    <insert id="insertBatchTStudent">
+        insert into t_student
+        (
+            stu_num,
+         stu_name,
+         class_id,
+         stu_sex,
+         stu_id_number,
+         stu_birthday,
+         nation,
+         photo,
+         note,
+         age,
+        create_time,
+        create_by
+        )
+        <trim prefix="values" >
+            <foreach collection="list" item="student" open="(" separator=") , (" close=")">
+                #{student.stuNum},
+                #{student.stuName},
+                #{student.classId},
+                #{student.stuSex},
+                #{student.stuIdNumber},
+                #{student.stuBirthday},
+                #{student.nation},
+                #{student.photo},
+                #{student.note},
+                #{student.age},
+                #{student.createTime},
+                #{student.createBy}
+            </foreach>
+        </trim>
+    </insert>
+
+    <select id="existsIdNumberAndStudentNum" resultType="integer">
+        select count(1) from t_student student
+        <where>
+            <include refid="del_flag_where_clause"></include>
+            <if test="id != null"> and id != #{id}</if>
+               and (  stu_id_number = #{stuIdNumber} or stu_num = #{stuNum} )
+        </where>
+    </select>
+    <select id="selectTStudentByName" resultType="com.dap.system.office.domain.TStudent">
+        select id,stu_name stuName,class_id classId  from t_student
+    </select>
+    <select id="existsStudentAsClassId" resultType="java.lang.Integer">
+        select count(1) from t_student student
+            <where>
+                <include refid="del_flag_where_clause" />
+                and class_id in
+                <foreach collection="list" item="item" open="(" close=")"  separator=",">
+                      #{item}
+                </foreach>
+            </where>
+    </select>
+    <update id="updateTStudent" parameterType="com.dap.system.office.domain.TStudent">
+        update t_student
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuNum != null and stuNum != ''">stu_num = #{stuNum},</if>
+            <if test="stuName != null and stuName != ''">stu_name = #{stuName},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="stuBirthday != null">stu_birthday = #{stuBirthday},</if>
+            <if test="stuSex != null and stuSex != ''">stu_sex = #{stuSex},</if>
+            <if test="stuIdNumber != null and stuIdNumber != ''">stu_id_number = #{stuIdNumber},</if>
+            <if test="nation != null and nation != ''">nation = #{nation},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="photo != null ">photo = #{photo},</if>
+            <if test="note != null and note != ''">note = #{note},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="delFlag != null and delFlag != ''">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <delete id="deleteTStudentById" >
+        update t_student set del_flag = '2' where id = #{id}
+    </delete>
+
+    <delete id="deleteTStudentByIds" >
+        update t_student set del_flag = '2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

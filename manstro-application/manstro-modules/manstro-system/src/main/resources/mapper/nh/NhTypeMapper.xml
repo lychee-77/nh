@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dap.system.nh.mapper.NhTypeMapper">
+
+    <resultMap type="com.dap.system.nh.domain.NhType" id="NhTypeResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectNhTypeVo">
+        select id, name, remark, del_flag, create_user, create_time, update_user, update_time from nh_type type
+    </sql>
+
+    <sql id="del_flag_where">
+        and `type`.del_flag = '0'
+    </sql>
+    <select id="selectNhTypeList" parameterType="com.dap.system.nh.domain.NhType" resultMap="NhTypeResult">
+        <include refid="selectNhTypeVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <include refid="del_flag_where" />
+        </where>
+    </select>
+
+    <select id="selectNhTypeById" parameterType="Long" resultMap="NhTypeResult">
+        <include refid="selectNhTypeVo"/>
+        where id = #{id}
+        <include refid="del_flag_where" />
+    </select>
+
+    <select id="existsNhType" resultType="com.dap.system.nh.domain.NhType">
+       select id,name from nh_type type
+        <where>
+            <if test="name != null and name != ''">
+                and type.name = #{name}
+            </if>
+            <if test="id != null ">
+                and type.id = #{id}
+            </if>
+            <include refid="del_flag_where"></include>
+        </where>
+    </select>
+    <select id="currentNhTypeIsExistsMeasure" resultType="java.lang.String">
+        SELECT
+            equipment.type_model
+        FROM
+        nh_measure measure
+        LEFT JOIN nh_type type ON measure.nh_type_id = type.id
+        LEFT JOIN nh_equipment equipment ON equipment.id = measure.equip_id
+        <where>
+            type.id  in
+            <foreach collection="list" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+            <include refid="del_flag_where"></include>
+            <include refid="com.dap.system.nh.mapper.NhEquipmentMapper.del_flag_where"></include>
+        </where>
+    </select>
+    <select id="selectNhTypeTreeList" resultType="com.dap.system.nh.domain.vo.TreeNode">
+        select id,name label from nh_type `type`
+        <where>
+            <include refid="del_flag_where"/>
+        </where>
+    </select>
+
+    <insert id="insertNhType" parameterType="com.dap.system.nh.domain.NhType" useGeneratedKeys="true" keyProperty="id">
+        insert into nh_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateUser != null">update_user,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNhType" parameterType="com.dap.system.nh.domain.NhType">
+        update nh_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNhTypeById" parameterType="Long">
+        update nh_type set del_flag = '2' where id = #{id}
+    </delete>
+
+    <delete id="deleteNhTypeByIds" parameterType="String">
+        update nh_type set del_flag = '2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

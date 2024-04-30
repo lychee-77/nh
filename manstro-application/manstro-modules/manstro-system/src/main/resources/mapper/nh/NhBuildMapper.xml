@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dap.system.nh.mapper.NhBuildMapper">
+
+    <resultMap type="com.dap.system.nh.domain.NhBuild" id="NhBuildResult">
+        <result property="id" column="id"/>
+        <result property="buildName" column="build_name"/>
+        <result property="remark" column="remark"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+
+    <sql id="selectNhBuildVo">
+        select id,
+               build_name,
+               remark,
+               del_flag,
+               create_user,
+               create_time,
+               update_user,
+               update_time
+        from nh_build build
+    </sql>
+
+    <sql id="del_flag_where">
+        and build.del_flag = '0'
+    </sql>
+
+    <select id="selectNhBuildList" parameterType="com.dap.system.nh.domain.NhBuild" resultMap="NhBuildResult">
+        <include refid="selectNhBuildVo"/>
+        <where>
+            <if test="buildName != null  and buildName != ''">and build_name like concat('%', #{buildName}, '%')</if>
+            <include refid="del_flag_where"></include>
+        </where>
+    </select>
+
+
+    <select id="selectNhBuildById" parameterType="Long" resultMap="NhBuildResult">
+        <include refid="selectNhBuildVo"/>
+        where id = #{id}
+        <include refid="del_flag_where"></include>
+    </select>
+    <select id="existsBuilder" resultType="com.dap.system.nh.domain.NhBuild">
+        select id,build_name buildName from nh_build build
+        <where>
+            <if test="list != null and list.size() > 0">
+                <foreach collection="list" item="id" separator="," open="id in (" close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <include refid="del_flag_where"></include>
+        </where>
+    </select>
+    <select id="currentBuilderIsExistsFloorer" resultType="string">
+        SELECT
+            floor_name floorName
+        FROM
+            nh_floor floor
+                LEFT JOIN nh_build build ON floor.build_id = build.id
+        <where>
+            floor.build_id in
+            <foreach collection="list" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+            <include refid="del_flag_where"></include>
+            <include refid="com.dap.system.nh.mapper.NhFloorMapper.del_flag_where"></include>
+        </where>
+    </select>
+    <select id="existsBuilderByBuildName" resultType="java.lang.Long">
+        select count(1) from nh_build build
+        <where>
+
+
+         build_name = #{buildName}
+            <if test="id != null and id > 0">and id != #{id}</if>
+        <include refid="del_flag_where"></include>
+        </where>
+    </select>
+    <select id="selectNhBuildTreeList" resultType="com.dap.system.nh.domain.vo.TreeNode">
+        select id,build_name label from nh_build build where del_flag = '0'
+    </select>
+
+    <insert id="insertNhBuild" parameterType="com.dap.system.nh.domain.NhBuild" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into nh_build
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="buildName != null and buildName != ''">build_name,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateUser != null">update_user,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="buildName != null and buildName != ''">#{buildName},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateNhBuild" parameterType="com.dap.system.nh.domain.NhBuild">
+        update nh_build
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="buildName != null and buildName != ''">build_name = #{buildName},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNhBuildById" parameterType="Long">
+        update nh_build
+        set del_flag = '2'
+        where id = #{id}
+
+    </delete>
+
+    <delete id="deleteNhBuildByIds" parameterType="String">
+        update nh_build set del_flag = '2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+    </delete>
+</mapper>
