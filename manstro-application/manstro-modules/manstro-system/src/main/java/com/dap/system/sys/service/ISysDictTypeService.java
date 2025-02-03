@@ -7,7 +7,7 @@ import com.dap.system.sys.domain.SysDictType;
 /**
  * 字典 业务层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface ISysDictTypeService
 {

@@ -10,7 +10,7 @@ import com.dap.system.sys.domain.vo.TreeSelect;
 /**
  * 菜单 业务层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface ISysMenuService
 {

@@ -24,7 +24,7 @@ import com.dap.system.sys.service.ISysNoticeService;
 /**
  * 公告 信息操作处理
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RestController
 @RequestMapping("/notice")

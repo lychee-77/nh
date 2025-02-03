@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 /**
  * 自定义限流异常处理
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SentinelFallbackHandler implements WebExceptionHandler
 {

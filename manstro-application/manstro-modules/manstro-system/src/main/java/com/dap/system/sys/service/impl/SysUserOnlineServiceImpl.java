@@ -9,7 +9,7 @@ import com.dap.system.sys.service.ISysUserOnlineService;
 /**
  * 在线用户 服务层处理
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Service
 public class SysUserOnlineServiceImpl implements ISysUserOnlineService

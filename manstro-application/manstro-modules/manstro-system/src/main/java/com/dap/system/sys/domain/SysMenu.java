@@ -12,7 +12,7 @@ import com.dap.common.core.web.domain.BaseEntity;
 /**
  * 菜单权限表 sys_menu
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SysMenu extends BaseEntity
 {

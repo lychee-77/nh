@@ -24,7 +24,7 @@ import com.dap.system.sys.service.ISysOperLogService;
 /**
  * 操作日志记录
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RestController
 @RequestMapping("/operlog")

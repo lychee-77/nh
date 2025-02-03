@@ -3,7 +3,7 @@ package com.dap.common.core.exception;
 /**
  * 基础异常
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class BaseException extends RuntimeException
 {

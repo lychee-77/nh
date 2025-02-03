@@ -14,7 +14,7 @@ import com.dap.gen.domain.GenTableColumn;
 /**
  * 模板工具类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class VelocityUtils
 {

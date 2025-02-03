@@ -7,7 +7,7 @@ import com.dap.common.core.utils.StringUtils;
 /**
  * 操作消息提醒
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class AjaxResult extends HashMap<String, Object>
 {

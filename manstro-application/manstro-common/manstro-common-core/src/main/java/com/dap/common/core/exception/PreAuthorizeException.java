@@ -3,7 +3,7 @@ package com.dap.common.core.exception;
 /**
  * 权限异常
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class PreAuthorizeException extends RuntimeException
 {

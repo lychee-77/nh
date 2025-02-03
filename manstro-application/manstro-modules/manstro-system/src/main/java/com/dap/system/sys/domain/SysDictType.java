@@ -11,7 +11,7 @@ import com.dap.common.core.web.domain.BaseEntity;
 /**
  * 字典类型表 sys_dict_type
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SysDictType extends BaseEntity
 {

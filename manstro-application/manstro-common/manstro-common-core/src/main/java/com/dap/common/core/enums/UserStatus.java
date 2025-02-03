@@ -3,7 +3,7 @@ package com.dap.common.core.enums;
 /**
  * 用户状态
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public enum UserStatus
 {

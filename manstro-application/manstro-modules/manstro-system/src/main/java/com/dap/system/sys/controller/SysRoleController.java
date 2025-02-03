@@ -28,7 +28,7 @@ import com.dap.system.sys.service.ISysRoleService;
 /**
  * 角色信息
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RestController
 @RequestMapping("/role")

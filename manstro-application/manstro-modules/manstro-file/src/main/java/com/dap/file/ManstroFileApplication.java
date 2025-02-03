@@ -9,7 +9,7 @@ import com.dap.common.swagger.annotation.EnableCustomSwagger2;
 /**
  * 文件服务
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @EnableCustomSwagger2
 @EnableDiscoveryClient

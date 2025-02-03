@@ -11,7 +11,7 @@ import com.dap.common.core.web.domain.BaseEntity;
 /**
  * 岗位表 sys_post
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SysPost extends BaseEntity
 {

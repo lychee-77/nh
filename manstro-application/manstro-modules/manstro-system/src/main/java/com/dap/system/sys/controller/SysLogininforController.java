@@ -27,7 +27,7 @@ import com.dap.system.sys.service.ISysLogininforService;
 /**
  * 系统访问记录
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RestController
 @RequestMapping("/logininfor")

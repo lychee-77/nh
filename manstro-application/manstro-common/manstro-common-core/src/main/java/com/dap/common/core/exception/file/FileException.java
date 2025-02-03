@@ -5,7 +5,7 @@ import com.dap.common.core.exception.BaseException;
 /**
  * 文件信息异常类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class FileException extends BaseException
 {

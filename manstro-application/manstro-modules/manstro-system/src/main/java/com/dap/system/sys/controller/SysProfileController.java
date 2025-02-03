@@ -28,7 +28,7 @@ import com.dap.system.sys.service.ISysUserService;
 /**
  * 个人信息 业务处理
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RestController
 @RequestMapping("/user/profile")

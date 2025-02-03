@@ -3,7 +3,7 @@ package com.dap.common.core.exception;
 /**
  * 验证码错误异常类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class CaptchaException extends RuntimeException
 {

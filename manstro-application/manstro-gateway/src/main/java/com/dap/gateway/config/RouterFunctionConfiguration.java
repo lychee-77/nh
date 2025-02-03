@@ -12,7 +12,7 @@ import com.dap.gateway.handler.ValidateCodeHandler;
 /**
  * 路由配置信息
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Configuration
 public class RouterFunctionConfiguration

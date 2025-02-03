@@ -19,7 +19,7 @@ import com.dap.system.api.model.LoginUser;
 /**
  * token验证处理
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Component
 public class TokenService

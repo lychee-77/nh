@@ -7,7 +7,7 @@ import com.dap.system.api.domain.SysUser;
 /**
  * 用户 业务层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface ISysUserService
 {

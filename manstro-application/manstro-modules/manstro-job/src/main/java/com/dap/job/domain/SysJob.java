@@ -17,7 +17,7 @@ import com.dap.job.util.CronUtils;
 /**
  * 定时任务调度表 sys_job
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SysJob extends BaseEntity implements Serializable
 {

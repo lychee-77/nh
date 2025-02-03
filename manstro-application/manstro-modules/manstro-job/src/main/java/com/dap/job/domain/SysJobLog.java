@@ -9,7 +9,7 @@ import com.dap.common.core.web.domain.BaseEntity;
 /**
  * 定时任务调度日志表 sys_job_log
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SysJobLog extends BaseEntity
 {

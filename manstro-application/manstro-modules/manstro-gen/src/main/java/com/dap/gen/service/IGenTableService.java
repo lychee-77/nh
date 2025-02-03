@@ -7,7 +7,7 @@ import com.dap.gen.domain.GenTable;
 /**
  * 业务 服务层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface IGenTableService
 {

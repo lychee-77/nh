@@ -3,7 +3,7 @@ package com.dap.common.log.enums;
 /**
  * 业务操作类型
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public enum BusinessType
 {

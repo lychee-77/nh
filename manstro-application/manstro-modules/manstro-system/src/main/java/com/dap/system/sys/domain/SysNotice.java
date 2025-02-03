@@ -10,7 +10,7 @@ import com.dap.common.core.web.domain.BaseEntity;
 /**
  * 通知公告表 sys_notice
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SysNotice extends BaseEntity
 {

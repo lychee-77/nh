@@ -7,7 +7,7 @@ import com.dap.system.api.domain.SysOperLog;
 /**
  * 操作日志 数据层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface SysOperLogMapper
 {

@@ -8,7 +8,7 @@ import com.dap.job.domain.SysJob;
 /**
  * 定时任务调度信息信息 服务层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface ISysJobService
 {

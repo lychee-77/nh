@@ -9,7 +9,7 @@ import com.dap.system.api.domain.SysUser;
 /**
  * 用户表 数据层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface SysUserMapper
 {

@@ -7,7 +7,7 @@ import com.dap.common.core.constant.Constants;
 /**
  * VelocityEngine工厂
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class VelocityInitializer
 {

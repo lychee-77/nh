@@ -3,7 +3,7 @@ package com.dap.common.core.exception;
 /**
  * 工具类异常
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class UtilException extends RuntimeException
 {

@@ -6,7 +6,7 @@ import com.dap.common.core.constant.Constants;
 /**
  * 响应信息主体
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class R<T> implements Serializable
 {

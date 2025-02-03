@@ -11,7 +11,7 @@ import com.dap.common.core.web.domain.BaseEntity;
 /**
  * 业务表 gen_table
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class GenTable extends BaseEntity
 {

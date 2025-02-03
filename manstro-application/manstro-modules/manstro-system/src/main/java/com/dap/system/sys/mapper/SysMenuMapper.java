@@ -9,7 +9,7 @@ import com.dap.system.sys.domain.SysMenu;
 /**
  * 菜单表 数据层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface SysMenuMapper
 {

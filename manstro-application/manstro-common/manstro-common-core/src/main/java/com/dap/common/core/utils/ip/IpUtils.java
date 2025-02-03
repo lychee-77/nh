@@ -8,7 +8,7 @@ import com.dap.common.core.utils.StringUtils;
 /**
  * 获取IP方法
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class IpUtils
 {

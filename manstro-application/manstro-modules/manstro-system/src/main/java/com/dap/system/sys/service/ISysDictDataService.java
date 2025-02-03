@@ -6,7 +6,7 @@ import com.dap.system.sys.domain.SysDictData;
 /**
  * 字典 业务层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface ISysDictDataService
 {

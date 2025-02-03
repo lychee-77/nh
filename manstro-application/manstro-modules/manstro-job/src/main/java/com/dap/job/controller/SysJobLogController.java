@@ -23,7 +23,7 @@ import com.dap.job.service.ISysJobLogService;
 /**
  * 调度日志操作处理
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RestController
 @RequestMapping("/job/log")

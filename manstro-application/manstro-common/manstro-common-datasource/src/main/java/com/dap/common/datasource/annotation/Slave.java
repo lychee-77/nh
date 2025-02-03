@@ -10,7 +10,7 @@ import com.baomidou.dynamic.datasource.annotation.DS;
 /**
  * 从库数据源
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)

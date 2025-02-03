@@ -9,7 +9,7 @@ import com.dap.system.sys.domain.SysUserRole;
 /**
  * 用户与角色关联表 数据层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface SysUserRoleMapper
 {

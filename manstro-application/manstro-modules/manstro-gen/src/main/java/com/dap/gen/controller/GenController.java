@@ -31,7 +31,7 @@ import com.dap.gen.service.IGenTableService;
 /**
  * 代码生成 操作处理
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RequestMapping("/gen")
 @RestController

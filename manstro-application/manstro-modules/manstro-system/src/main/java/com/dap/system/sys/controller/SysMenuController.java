@@ -26,7 +26,7 @@ import com.dap.system.sys.service.ISysMenuService;
 /**
  * 菜单信息
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RestController
 @RequestMapping("/menu")

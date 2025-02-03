@@ -11,7 +11,7 @@ import com.dap.common.core.web.domain.BaseEntity;
 /**
  * 参数配置表 sys_config
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SysConfig extends BaseEntity
 {

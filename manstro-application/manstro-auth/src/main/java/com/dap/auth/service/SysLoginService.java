@@ -17,7 +17,7 @@ import com.dap.system.api.model.LoginUser;
 /**
  * 登录校验方法
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Component
 public class SysLoginService

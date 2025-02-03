@@ -17,7 +17,7 @@ import com.dap.common.core.web.domain.BaseEntity;
 /**
  * 用户对象 sys_user
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SysUser extends BaseEntity
 {

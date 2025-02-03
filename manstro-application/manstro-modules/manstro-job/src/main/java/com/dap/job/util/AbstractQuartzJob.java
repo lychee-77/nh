@@ -18,7 +18,7 @@ import com.dap.job.service.ISysJobLogService;
 /**
  * 抽象quartz调用
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public abstract class AbstractQuartzJob implements Job
 {

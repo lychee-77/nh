@@ -10,7 +10,7 @@ import com.dap.common.swagger.annotation.EnableCustomSwagger2;
 /**
  * 系统模块
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @EnableCustomConfig
 @EnableCustomSwagger2

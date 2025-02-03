@@ -11,7 +11,7 @@ import com.dap.system.sys.domain.SysDictData;
 /**
  * 字典工具类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class DictUtils
 {

@@ -7,7 +7,7 @@ import com.dap.system.sys.domain.SysNotice;
 /**
  * 公告 服务层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface ISysNoticeService
 {

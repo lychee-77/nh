@@ -16,7 +16,7 @@ import com.dap.common.core.web.domain.AjaxResult;
 /**
  * 全局异常处理器
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler

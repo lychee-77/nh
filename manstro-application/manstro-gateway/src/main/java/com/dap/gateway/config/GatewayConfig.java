@@ -11,7 +11,7 @@ import com.dap.gateway.handler.SentinelFallbackHandler;
 /**
  * 网关限流配置
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Configuration
 public class GatewayConfig

@@ -21,7 +21,7 @@ import com.dap.gateway.service.ValidateCodeService;
 /**
  * 验证码实现处理
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Service
 public class ValidateCodeServiceImpl implements ValidateCodeService

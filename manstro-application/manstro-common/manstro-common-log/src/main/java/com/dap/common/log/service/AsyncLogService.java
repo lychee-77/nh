@@ -9,7 +9,7 @@ import com.dap.system.api.domain.SysOperLog;
 /**
  * 异步调用日志服务
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Service
 public class AsyncLogService

@@ -3,7 +3,7 @@ package com.dap.common.core.constant;
 /**
  * 任务调度通用常量
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class ScheduleConstants
 {

@@ -11,7 +11,7 @@ import com.github.tobato.fastdfs.service.FastFileStorageClient;
 /**
  * FastDFS 文件存储
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Service
 public class FastDfsSysFileServiceImpl implements ISysFileService

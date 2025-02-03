@@ -27,7 +27,7 @@ import com.dap.system.sys.service.ISysDeptService;
 /**
  * 部门信息
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RestController
 @RequestMapping("/dept")

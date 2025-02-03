@@ -9,7 +9,7 @@ import com.dap.system.sys.domain.SysDictType;
 /**
  * 字典表 数据层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Mapper
 public interface SysDictTypeMapper

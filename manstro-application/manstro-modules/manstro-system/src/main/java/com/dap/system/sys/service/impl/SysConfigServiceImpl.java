@@ -18,7 +18,7 @@ import com.dap.system.sys.service.ISysConfigService;
 /**
  * 参数配置 服务层实现
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Service
 public class SysConfigServiceImpl implements ISysConfigService

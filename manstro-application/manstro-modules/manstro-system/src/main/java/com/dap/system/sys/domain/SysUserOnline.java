@@ -3,7 +3,7 @@ package com.dap.system.sys.domain;
 /**
  * 当前在线会话
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SysUserOnline
 {

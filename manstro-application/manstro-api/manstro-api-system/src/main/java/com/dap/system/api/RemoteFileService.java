@@ -13,7 +13,7 @@ import com.dap.common.core.domain.R;
 /**
  * 文件服务
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @FeignClient(contextId = "remoteFileService", value = ServiceNameConstants.FILE_SERVICE, fallbackFactory = RemoteFileFallbackFactory.class)
 public interface RemoteFileService

@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * 角色和菜单关联 sys_role_menu
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SysRoleMenu
 {

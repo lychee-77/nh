@@ -7,7 +7,7 @@ import com.dap.system.sys.domain.SysPost;
 /**
  * 岗位信息 数据层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface SysPostMapper
 {

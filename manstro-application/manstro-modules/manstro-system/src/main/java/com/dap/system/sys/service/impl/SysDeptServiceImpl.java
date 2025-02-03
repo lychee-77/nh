@@ -20,7 +20,7 @@ import com.dap.system.sys.service.ISysDeptService;
 /**
  * 部门管理 服务实现
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Service
 public class SysDeptServiceImpl implements ISysDeptService

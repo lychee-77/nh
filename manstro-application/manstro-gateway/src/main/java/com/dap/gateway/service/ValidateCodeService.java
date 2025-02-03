@@ -7,7 +7,7 @@ import com.dap.common.core.web.domain.AjaxResult;
 /**
  * 验证码处理
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface ValidateCodeService
 {

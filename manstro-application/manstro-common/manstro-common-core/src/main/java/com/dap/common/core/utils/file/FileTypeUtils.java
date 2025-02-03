@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * 文件类型工具类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class FileTypeUtils
 {

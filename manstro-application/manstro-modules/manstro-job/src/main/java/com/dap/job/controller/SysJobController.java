@@ -29,7 +29,7 @@ import com.dap.job.util.CronUtils;
 /**
  * 调度任务信息操作处理
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RestController
 @RequestMapping("/job")

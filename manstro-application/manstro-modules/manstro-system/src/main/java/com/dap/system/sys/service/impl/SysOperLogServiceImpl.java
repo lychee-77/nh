@@ -10,7 +10,7 @@ import com.dap.system.sys.service.ISysOperLogService;
 /**
  * 操作日志 服务层处理
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Service
 public class SysOperLogServiceImpl implements ISysOperLogService

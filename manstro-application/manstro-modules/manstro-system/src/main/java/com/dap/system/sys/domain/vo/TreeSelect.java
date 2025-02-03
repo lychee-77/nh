@@ -10,7 +10,7 @@ import com.dap.system.sys.domain.SysMenu;
 /**
  * Treeselect树结构实体类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class TreeSelect implements Serializable
 {

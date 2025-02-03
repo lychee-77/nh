@@ -9,7 +9,7 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 /**
  * 定时任务配置
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Configuration
 public class ScheduleConfig

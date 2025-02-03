@@ -5,7 +5,7 @@ import com.dap.common.core.utils.StringUtils;
 /**
  * 字符串格式化
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class StrFormatter
 {

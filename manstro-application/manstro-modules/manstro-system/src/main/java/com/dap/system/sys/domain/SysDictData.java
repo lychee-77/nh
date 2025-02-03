@@ -12,7 +12,7 @@ import com.dap.common.core.web.domain.BaseEntity;
 /**
  * 字典数据表 sys_dict_data
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SysDictData extends BaseEntity
 {

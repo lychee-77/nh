@@ -3,7 +3,7 @@ package com.dap.common.core.exception;
 /**
  * 自定义异常
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class CustomException extends RuntimeException
 {

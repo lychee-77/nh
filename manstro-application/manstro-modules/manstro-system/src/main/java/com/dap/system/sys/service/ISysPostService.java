@@ -7,7 +7,7 @@ import com.dap.system.sys.domain.SysPost;
 /**
  * 岗位信息 服务层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface ISysPostService
 {

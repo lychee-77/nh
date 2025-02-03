@@ -40,7 +40,7 @@ import com.dap.system.sys.service.ISysUserService;
 /**
  * 用户信息
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RestController
 @RequestMapping("/user")

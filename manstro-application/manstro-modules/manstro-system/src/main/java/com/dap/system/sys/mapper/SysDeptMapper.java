@@ -9,7 +9,7 @@ import com.dap.system.api.domain.SysDept;
 /**
  * 部门管理 数据层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface SysDeptMapper
 {

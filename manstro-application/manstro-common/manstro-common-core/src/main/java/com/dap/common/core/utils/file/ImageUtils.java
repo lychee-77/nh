@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 图片处理工具类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class ImageUtils {
     private static final Logger log = LoggerFactory.getLogger(ImageUtils.class);

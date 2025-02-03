@@ -16,7 +16,7 @@ import com.dap.system.api.model.LoginUser;
 /**
  * token 控制
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RestController
 public class TokenController

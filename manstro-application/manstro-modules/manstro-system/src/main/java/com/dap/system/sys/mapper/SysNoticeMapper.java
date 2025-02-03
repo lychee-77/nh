@@ -7,7 +7,7 @@ import com.dap.system.sys.domain.SysNotice;
 /**
  * 通知公告表 数据层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface SysNoticeMapper
 {

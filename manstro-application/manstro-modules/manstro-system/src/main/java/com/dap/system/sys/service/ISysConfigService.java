@@ -7,7 +7,7 @@ import com.dap.system.sys.domain.SysConfig;
 /**
  * 参数配置 服务层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface ISysConfigService
 {

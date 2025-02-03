@@ -11,7 +11,7 @@ import com.dap.gen.domain.GenTableColumn;
 /**
  * 代码生成器 工具类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class GenUtils
 {

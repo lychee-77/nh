@@ -3,7 +3,7 @@ package com.dap.common.log.enums;
 /**
  * 操作人类别
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public enum OperatorType
 {

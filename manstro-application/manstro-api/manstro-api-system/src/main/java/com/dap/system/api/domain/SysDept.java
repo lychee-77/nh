@@ -12,7 +12,7 @@ import com.dap.common.core.web.domain.BaseEntity;
 /**
  * 部门表 sys_dept
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SysDept extends BaseEntity
 {

@@ -9,7 +9,7 @@ import com.dap.common.core.web.domain.BaseEntity;
 /**
  * 系统访问记录表 sys_logininfor
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SysLogininfor extends BaseEntity
 {

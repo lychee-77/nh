@@ -7,7 +7,7 @@ import com.dap.system.api.domain.SysRole;
 /**
  * 角色表 数据层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface SysRoleMapper
 {

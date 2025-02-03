@@ -6,7 +6,7 @@ import com.dap.gen.domain.GenTable;
 /**
  * 业务 数据层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface GenTableMapper
 {

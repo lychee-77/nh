@@ -20,7 +20,7 @@ import com.dap.system.api.model.LoginUser;
 /**
  * 自定义权限实现
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Aspect
 @Component

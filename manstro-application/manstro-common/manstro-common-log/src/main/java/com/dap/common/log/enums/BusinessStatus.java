@@ -3,7 +3,7 @@ package com.dap.common.log.enums;
 /**
  * 操作状态
  *
- * @author diaozhaojian
+ * @author Lychee
  *
  */
 public enum BusinessStatus

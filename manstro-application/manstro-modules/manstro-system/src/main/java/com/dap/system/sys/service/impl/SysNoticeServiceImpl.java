@@ -12,7 +12,7 @@ import com.dap.system.sys.service.ISysNoticeService;
 /**
  * 公告 服务层实现
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Service
 public class SysNoticeServiceImpl implements ISysNoticeService

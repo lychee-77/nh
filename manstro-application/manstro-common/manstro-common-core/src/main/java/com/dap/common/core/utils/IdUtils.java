@@ -5,7 +5,7 @@ import com.dap.common.core.text.UUID;
 /**
  * ID生成器工具类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class IdUtils
 {

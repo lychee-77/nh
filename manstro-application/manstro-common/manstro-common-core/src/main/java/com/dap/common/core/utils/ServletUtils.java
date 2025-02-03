@@ -20,7 +20,7 @@ import com.dap.common.core.text.Convert;
 /**
  * 客户端工具类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class ServletUtils {
     private static final Logger logger = LoggerFactory.getLogger(ServletUtils.class);

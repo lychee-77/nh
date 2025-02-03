@@ -5,7 +5,7 @@ import com.dap.common.core.exception.BaseException;
 /**
  * 用户信息异常类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class UserException extends BaseException
 {

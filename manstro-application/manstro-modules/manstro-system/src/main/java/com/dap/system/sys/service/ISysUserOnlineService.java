@@ -6,7 +6,7 @@ import com.dap.system.sys.domain.SysUserOnline;
 /**
  * 在线用户 服务层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface ISysUserOnlineService
 {

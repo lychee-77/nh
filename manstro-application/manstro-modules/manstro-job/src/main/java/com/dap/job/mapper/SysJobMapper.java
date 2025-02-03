@@ -6,7 +6,7 @@ import com.dap.job.domain.SysJob;
 /**
  * 调度任务信息 数据层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface SysJobMapper
 {

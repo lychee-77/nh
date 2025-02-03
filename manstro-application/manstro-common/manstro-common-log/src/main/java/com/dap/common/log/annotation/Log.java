@@ -11,7 +11,7 @@ import com.dap.common.log.enums.OperatorType;
 /**
  * 自定义操作日志记录注解
  *
- * @author diaozhaojian
+ * @author Lychee
  *
  */
 @Target({ ElementType.PARAMETER, ElementType.METHOD })

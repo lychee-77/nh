@@ -3,7 +3,7 @@ package com.dap.common.core.utils.sign;
 /**
  * Base64工具类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public final class Base64 {
     static private final int BASELENGTH = 128;

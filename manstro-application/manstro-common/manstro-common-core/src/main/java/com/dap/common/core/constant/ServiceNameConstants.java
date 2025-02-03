@@ -3,7 +3,7 @@ package com.dap.common.core.constant;
 /**
  * 服务名称
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class ServiceNameConstants
 {

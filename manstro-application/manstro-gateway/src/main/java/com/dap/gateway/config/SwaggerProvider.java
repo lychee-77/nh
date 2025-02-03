@@ -13,7 +13,7 @@ import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 /**
  * 聚合系统接口
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Component
 public class SwaggerProvider implements SwaggerResourcesProvider

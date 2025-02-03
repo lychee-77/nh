@@ -12,7 +12,7 @@ import feign.RequestTemplate;
 /**
  * feign 请求拦截器
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Component
 public class FeignRequestInterceptor implements RequestInterceptor

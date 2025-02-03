@@ -8,7 +8,7 @@ import com.dap.system.sys.domain.vo.TreeSelect;
 /**
  * 部门管理 服务层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface ISysDeptService
 {

@@ -11,7 +11,7 @@ import com.dap.system.api.model.LoginUser;
 /**
  * 用户服务
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @FeignClient(contextId = "remoteUserService", value = ServiceNameConstants.SYSTEM_SERVICE, fallbackFactory = RemoteUserFallbackFactory.class)
 public interface RemoteUserService

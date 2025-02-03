@@ -11,7 +11,7 @@ import com.dap.common.core.web.domain.BaseEntity;
 /**
  * 角色表 sys_role
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SysRole extends BaseEntity
 {

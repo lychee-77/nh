@@ -5,7 +5,7 @@ import com.dap.common.core.utils.StringUtils;
 /**
  * 分页数据
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class PageDomain
 {

@@ -33,7 +33,7 @@ import com.dap.system.api.domain.SysOperLog;
 /**
  * 操作日志记录处理
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Aspect
 @Component

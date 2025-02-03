@@ -3,7 +3,7 @@ package com.dap.common.core.constant;
 /**
  * 返回状态码
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class HttpStatus
 {

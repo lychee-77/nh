@@ -12,7 +12,7 @@ import com.dap.common.core.domain.R;
 /**
  * 日志服务
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @FeignClient(contextId = "remoteLogService", value = ServiceNameConstants.SYSTEM_SERVICE, fallbackFactory = RemoteLogFallbackFactory.class)
 public interface RemoteLogService

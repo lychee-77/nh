@@ -8,7 +8,7 @@ import com.dap.system.api.domain.SysUser;
 /**
  * 用户信息
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class LoginUser implements Serializable
 {

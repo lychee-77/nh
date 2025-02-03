@@ -39,7 +39,7 @@ import com.dap.gen.util.VelocityUtils;
 /**
  * 业务 服务层实现
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Service
 public class GenTableServiceImpl implements IGenTableService

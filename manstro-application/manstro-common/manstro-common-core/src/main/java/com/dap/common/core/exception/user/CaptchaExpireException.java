@@ -3,7 +3,7 @@ package com.dap.common.core.exception.user;
 /**
  * 验证码失效异常类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class CaptchaExpireException extends UserException
 {

@@ -6,7 +6,7 @@ import com.dap.common.core.utils.StringUtils;
 /**
  * sql操作工具类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SqlUtil
 {

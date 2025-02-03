@@ -7,7 +7,7 @@ import com.dap.common.security.annotation.EnableRyFeignClients;
 /**
  * 认证授权中心
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @EnableRyFeignClients
 @SpringCloudApplication

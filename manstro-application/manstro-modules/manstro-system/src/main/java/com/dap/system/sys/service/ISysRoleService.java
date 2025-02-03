@@ -8,7 +8,7 @@ import com.dap.system.api.domain.SysRole;
 /**
  * 角色业务层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface ISysRoleService
 {

@@ -3,7 +3,7 @@ package com.dap.common.core.constant;
 /**
  * 代码生成通用常量
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class GenConstants
 {

@@ -6,7 +6,7 @@ import com.dap.system.api.domain.SysOperLog;
 /**
  * 操作日志 服务层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface ISysOperLogService
 {

@@ -3,7 +3,7 @@ package com.dap.common.core.constant;
 /**
  * 用户常量信息
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class UserConstants
 {

@@ -16,7 +16,7 @@ import com.dap.common.core.text.Convert;
 /**
  * 权限获取工具类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class SecurityUtils {
 

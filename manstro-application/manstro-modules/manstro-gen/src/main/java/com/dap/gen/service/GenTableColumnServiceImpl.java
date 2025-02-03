@@ -10,7 +10,7 @@ import com.dap.gen.mapper.GenTableColumnMapper;
 /**
  * 业务字段 服务层实现
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Service
 public class GenTableColumnServiceImpl implements IGenTableColumnService

@@ -28,7 +28,7 @@ import com.dap.system.sys.service.ISysDictTypeService;
 /**
  * 数据字典信息
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RestController
 @RequestMapping("/dict/type")

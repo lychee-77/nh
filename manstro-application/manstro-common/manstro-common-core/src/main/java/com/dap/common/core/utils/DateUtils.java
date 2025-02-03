@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 时间工具类
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 

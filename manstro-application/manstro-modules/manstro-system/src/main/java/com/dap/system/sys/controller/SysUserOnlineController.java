@@ -26,7 +26,7 @@ import com.dap.system.sys.service.ISysUserOnlineService;
 /**
  * 在线用户监控
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @RestController
 @RequestMapping("/online")

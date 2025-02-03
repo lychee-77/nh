@@ -12,7 +12,7 @@ import feign.hystrix.FallbackFactory;
 /**
  * 文件服务降级处理
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 @Component
 public class RemoteFileFallbackFactory implements FallbackFactory<RemoteFileService>

@@ -7,7 +7,7 @@ import com.dap.system.sys.domain.SysConfig;
 /**
  * 参数配置 数据层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface SysConfigMapper
 {

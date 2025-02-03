@@ -7,7 +7,7 @@ import com.dap.system.sys.domain.SysRoleDept;
 /**
  * 角色与部门关联表 数据层
  *
- * @author diaozhaojian
+ * @author Lychee
  */
 public interface SysRoleDeptMapper
 {
